@@ -49,6 +49,15 @@ public class main : MonoBehaviour {
     }
     internal eGameMode gameMode;
 
+    private float ScreenRate = 1f;
+
+#if UNITY_IPHONE
+    private Vector2 TouchStart;
+    private Vector2 TouchRecent;
+#endif
+
+
+
     // Use this for initialization
     void Start()
     {
@@ -61,7 +70,7 @@ public class main : MonoBehaviour {
         Difficulty = 4;
         gameMode = eGameMode.Opening;
 
-
+        ScreenRate = 800f / (float)Screen.currentResolution.width;
     }
 
 
@@ -79,7 +88,7 @@ public class main : MonoBehaviour {
             GameObject obj = Instantiate(NumOrigin);
             obj.transform.SetParent(InputParent);
             obj.transform.localScale = new Vector3(1, 1, 1);
-            obj.transform.localPosition = new Vector2(-250 + i * 40, -100);
+            obj.transform.localPosition = new Vector2(-320 + i * 60, -40);
             obj.name = i.ToString();
             int num = i;
             obj.transform.GetComponent<Button>().onClick.AddListener(delegate { SetCurrentNumber(num); });
@@ -242,7 +251,7 @@ public class main : MonoBehaviour {
         obj.transform.localScale = new Vector2(1, 1);
 
         List.transform.localPosition = new Vector2(0, tryNumber * 40);
-        obj.transform.position = new Vector2(0, 150);
+        obj.transform.position = new Vector2(0, 280);
 
         obj.transform.localPosition = new Vector2(180, obj.transform.localPosition.y);
 
@@ -458,7 +467,29 @@ public class main : MonoBehaviour {
         }
 
 
-        
+#if UNITY_IPHONE
+
+        if (Input.touches.Length > 0)
+        {
+            //Debug.Log("Touch");
+            Touch t = Input.GetTouch(0);
+            if (t.phase == TouchPhase.Began)
+            {
+                //Debug.Log("Touch Start");
+                TouchStart = t.position;
+                TouchRecent = TouchStart;
+            }
+            else if (t.phase == TouchPhase.Moved)
+            {
+                //Debug.Log("Touch Move");
+                float gap = t.position.y - TouchRecent.y;
+                TouchRecent = t.position;
+                List.transform.localPosition = new Vector2(0, List.transform.localPosition.y + gap * ScreenRate); 
+            }
+        }
+#endif
+
+
 
 
         Color currentColor = new Color(1.0f, Mathf.Abs(Mathf.Sin(Time.time * 10)), Mathf.Abs(Mathf.Sin(Time.time * 10)));
