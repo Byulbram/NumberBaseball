@@ -258,7 +258,7 @@ public class main : MonoBehaviour {
         obj.SetActive(true);
         tryNumber++;
 
-        Message.text = "이제 " + (tryNumber + 1) + "번째 시도야!";
+        Message.text = "이제 " + (tryNumber + 1) + "번째 시도입니다!";
         /*
         if (tryNumber < 10)
             Message.text = "이제 " + tryNumber + "번째 시도야!";
@@ -446,24 +446,7 @@ public class main : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            gameMode = eGameMode.Opening;
-            OpeningPanel.SetActive(true);
-            MainPanel.SetActive(false);
-            ClearPanel.SetActive(false);
-
-            for (int i = 0; i < Num.Length; i++)
-            {
-                Destroy(Num[i].gameObject);
-            }
-
-            int childCount = List.childCount;
-            if (childCount > 0)
-            {
-                for (int i = 0; i < childCount; i++)
-                {
-                    Destroy(List.GetChild(i).gameObject);
-                }
-            }
+            BackToMenu();
         }
 
 
@@ -601,5 +584,26 @@ public class main : MonoBehaviour {
         ClearPanel.SetActive(false);
     }
 
+    public void BackToMenu()
+    {
+        gameMode = eGameMode.Opening;
+        OpeningPanel.SetActive(true);
+        MainPanel.SetActive(false);
+        ClearPanel.SetActive(false);
+
+        for (int i = 0; i < Num.Length; i++)
+        {
+            Destroy(Num[i].gameObject);
+        }
+
+        int childCount = List.childCount;
+        if (childCount > 0)
+        {
+            for (int i = 0; i < childCount; i++)
+            {
+                Destroy(List.GetChild(i).gameObject);
+            }
+        }
+    }
 }
 
